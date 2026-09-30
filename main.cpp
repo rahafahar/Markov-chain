@@ -26,5 +26,9 @@ int main() {
         cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << endl;
     }
 
+    for(int i = 0; i < 10; i++) {
+        cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << endl;
+    }
+
     return 0;
 }
