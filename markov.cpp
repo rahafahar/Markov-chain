@@ -7,25 +7,20 @@ std::string joinWords(const std::string words[], int startIndex, int count) {
     
     std::string result = "";
     
-
-    /*
-    if(startIndex >= 0 && count < words.length()) {
+    for(int i = 0; i < count ; ++i) {
+       
+        result += words[startIndex + i];
         
-        for(int i = 0; i < count - 1; i++) {
-            result += words[startIndex + i];
-            //if clause is a bit iffy--no pun intended
-            if(i < count - 1){
-                result += " ";
-            }
+        if(i < count - 1){
+            result += " ";
         }
     }
-    */
     
 
     return result;
 }
 
-
+/*
 int readWordsFromFile(std::string filename, std::string words[], int maxWords) {
 
     std::ifstream inputFile;
@@ -103,7 +98,7 @@ std::string getRandomPrefix(const std::string prefixes[], int chainSize) {
 }
 
 
-/*
+
 std::string generateText(const std::string prefixes[], const std::string suffixes[], int chainSize, int order, int numWords) {
     std::string currentPrefix;
     if(chainSize <= 0 || 1 >= order >= 3 || numWords < order) {
@@ -131,3 +126,6 @@ std::string generateText(const std::string prefixes[], const std::string suffixe
 }
 
 */
+
+
+
