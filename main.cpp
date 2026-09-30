@@ -20,5 +20,11 @@ int main() {
         cout << words[i] << endl;
     } 
 
+    string prefixes[1000], suffixes[1000];
+    int chainSize = buildMarkovChain(testArray, count, 3, prefixes, suffixes, 1000);
+    for(int i = 0; i < 20 && i < chainSize; i++) {
+        cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << endl;
+    }
+
     return 0;
 }
