@@ -1,47 +1,66 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include "markov.h"
 using namespace std;
 
 int main() {
 
     srand(time(0));
+    const int MAX_WORDS = 5000;
+    string words[MAX_WORDS];
+    string prefixes[MAX_WORDS];
+    string suffixes[MAX_WORDS];
 
-    string testArray[] = {"the", "cat", "sat", "down"};
+    string userFile;
+    int order;
+    int maxWords;
+    int chainSize;
 
-    // f 1 test
-    cout << joinWords(testArray, 0, 2) << endl;
-    cout << joinWords(testArray, 1, 3) << endl;
 
-    // f 2 test
-    string words[1000];
-    int count = readWordsFromFile("test.txt", words, 1000);
-    cout << "Read " << count << " words" << endl;
-    for(int i = 0; i < 10 && i < count; i++){
-        cout << words[i] << endl;
-    } 
-    // f 3 test
-    string prefixes[1000], suffixes[1000];
-    int chainSize = buildMarkovChain(testArray, count, 3, prefixes, suffixes, 1000);
-    for(int i = 0; i < 20 && i < chainSize; i++) {
-        cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << endl;
+    cout << "Enter input file name: " << endl;
+    cin >> userFile ;
+    ifstream inputFile(userFile);
+
+    cout << "Enter order (1, 2, or 3): " << endl;
+    cin >> order;
+    if(order > 3 || order < 1) {
+        cout << "Please try again, order has to be 1-3" << endl;
+        cin >> order;
     }
 
-    //f 4 test
-    for(int i = 0; i < 10; i++) {
-        cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << endl;
+    cout << "Enter maximum number of words to generate: " << endl;
+    cin >> maxWords ;
+    if(maxWords <= order) {
+        cout << "Sorry, order+1 training words are needed, try again. " << endl;
+        cin >> maxWords;
     }
 
-    //f 5 test
-    for(int i = 0; i < 5; i++) {
-        cout << getRandomPrefix(prefixes, chainSize) << endl;
+    int count = readWordsFromFile(userFile, words, maxWords);
+
+    if(readWordsFromFile(userFile, words, maxWords) == -1) {
+        cout << "File open failure." << endl;
     }
 
-    // f 6 test
-    cout << " GENERATE TEXT FUNC TEST\n\n" << endl;
-    string output = generateText(prefixes, suffixes, chainSize, 1, 20);
+   chainSize = buildMarkovChain(words, count, 3, prefixes, suffixes, maxWords);
+
+   // check chainSize > 0
+   if(chainSize < 0){
+        cout << "Error, chain size is less than 0. Try again." << endl;
+   }
+   // if input array is at capacity let user know
+   if(maxWords > MAX_WORDS){
+        cout << "Maximum capacity of 5000 words is reached. Any words after max capacity were ignored." << endl;
+   }
+
+    string output = generateText(prefixes, suffixes, chainSize, order, maxWords);
+    
     cout << output << endl;
+    
+
+
+
 
     return 0;
 }
