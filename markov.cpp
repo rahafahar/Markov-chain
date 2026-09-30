@@ -108,10 +108,10 @@ std::string getRandomPrefix(const std::string prefixes[], int chainSize) {
 }
 
 
-/*
+
 std::string generateText(const std::string prefixes[], const std::string suffixes[], int chainSize, int order, int numWords) {
     std::string currentPrefix;
-    if(chainSize <= 0 || 1 >= order >= 3 || numWords < order) {
+    if(chainSize <= 0 || order < 1 || order > 3 || numWords < order) {
         return "";
     } else {
         currentPrefix = getRandomPrefix(prefixes, chainSize);
@@ -133,9 +133,29 @@ std::string generateText(const std::string prefixes[], const std::string suffixe
     }
 
     currentWords[wordIndex] = temp;
+
+
+    for(int i = 0; i < (numWords - order); i++) {
+        std::string newWord = getRandomSuffix(prefixes, suffixes, chainSize, currentPrefix);
+        if(newWord == ""){
+            break;
+        } else {
+            result += " ";
+        result += newWord;
+
+        for(int j = 0; j < order - 1; j++) {
+            currentWords[j] = currentWords[j + 1];
+        }
+        currentWords[order - 1] = newWord;
+        currentPrefix = joinWords(currentWords, 0, order);
+        }
+        
+    }
+
+    return result;
 }
 
-*/
+
 
 
 

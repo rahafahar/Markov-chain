@@ -38,5 +38,10 @@ int main() {
         cout << getRandomPrefix(prefixes, chainSize) << endl;
     }
 
+    // f 6 test
+    cout << " GENERATE TEXT FUNC TEST\n\n" << endl;
+    string output = generateText(prefixes, suffixes, chainSize, 1, 20);
+    cout << output << endl;
+
     return 0;
 }
