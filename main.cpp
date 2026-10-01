@@ -41,9 +41,9 @@ int main() {
 
     if(readWordsFromFile(userFile, words, maxWords) == -1) {
         cout << "File open failure." << endl;
-    }
+    } 
 
-   chainSize = buildMarkovChain(words, count, 3, prefixes, suffixes, maxWords);
+   chainSize = buildMarkovChain(words, count, order, prefixes, suffixes, maxWords);
 
    // check chainSize > 0
    if(chainSize < 0){
@@ -55,11 +55,12 @@ int main() {
    }
 
     string output = generateText(prefixes, suffixes, chainSize, order, maxWords);
+
+    
     
     cout << output << endl;
+
     
-
-
 
 
     return 0;

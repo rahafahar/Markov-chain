@@ -45,23 +45,25 @@ int readWordsFromFile(std::string filename, std::string words[], int maxWords) {
 
 int buildMarkovChain(const std::string words[], int numWords, int order, std::string prefixes[], std::string suffixes[], int maxChainSize) {
 
-    int count;
+    
 
     if(order < 1 || order > 3 || numWords <= order || maxChainSize <= 0) {
         return 0;
-    } else {
-        count = 0;
-    
-        int i = 0;
-        while(i < numWords - order && count < maxChainSize) {
-            std::string prefix = joinWords(words, i , order);
-            std::string suffix = words[i + order];
-            prefixes[count] = prefix;  
-            suffixes[count] = suffix;
-            count++;
-            i++;
-        }
+    } 
+
+    int count = 0;
+    int i = 0;
+
+    while(i < (numWords - order) && count < maxChainSize) {
+
+        std::string prefix = joinWords(words, i , order);
+        std::string suffix = words[i + order];
+        prefixes[count] = prefix;  
+        suffixes[count] = suffix;
+        count++;
+        i++;
     }
+    
 
     return count;
 }
@@ -70,25 +72,25 @@ int buildMarkovChain(const std::string words[], int numWords, int order, std::st
 std::string getRandomSuffix(const std::string prefixes[], const std::string suffixes[],  int chainSize, std::string currentPrefix) {
 
     int matchCount = 0;
-    for(int i = 0; i <= chainSize - 1; i++){
+    for(int i = 0; i < chainSize ; i++){
         if(prefixes[i] == currentPrefix) {
             matchCount++;
         }
-         if(matchCount == 0){
+        
+    }
+    if(matchCount == 0){
         return "";
-        }
     }
    
     int pick = rand() % matchCount;
     int matchCount2 = 0;
     for(int i = 0; i <= chainSize - 1; i++){
         if(prefixes[i] == currentPrefix) {
+           
+            if(matchCount2 == pick) {
+                return suffixes[i];
+            }
             matchCount2++;
-        }
-        if(pick == matchCount2) {
-            return suffixes[pick];
-        } else {
-            return " ";
         }
         
     }
@@ -113,9 +115,10 @@ std::string generateText(const std::string prefixes[], const std::string suffixe
     std::string currentPrefix;
     if(chainSize <= 0 || order < 1 || order > 3 || numWords < order) {
         return "";
-    } else {
-        currentPrefix = getRandomPrefix(prefixes, chainSize);
-    }
+    } 
+    
+    currentPrefix = getRandomPrefix(prefixes, chainSize);
+    
 
     std::string result = currentPrefix;
 
@@ -134,25 +137,28 @@ std::string generateText(const std::string prefixes[], const std::string suffixe
 
     currentWords[wordIndex] = temp;
 
+    int loops = numWords - order;
+    for(int i = 0; i < loops ; i++) {
 
-    for(int i = 0; i < (numWords - order); i++) {
         std::string newWord = getRandomSuffix(prefixes, suffixes, chainSize, currentPrefix);
         if(newWord == ""){
             break;
-        } else {
-            result += " ";
-        result += newWord;
+        } 
+
+        result += " " + newWord;
 
         for(int j = 0; j < order - 1; j++) {
             currentWords[j] = currentWords[j + 1];
         }
         currentWords[order - 1] = newWord;
+
         currentPrefix = joinWords(currentWords, 0, order);
-        }
+        
         
     }
 
     return result;
+
 }
 
 
